@@ -2,12 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <!-- Ensure proper scaling on mobile devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Valentine's Game</title>
+    <!-- Link to the updated CSS file -->
     <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts for stylish typography -->
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Lato&display=swap" rel="stylesheet">
 </head>
 <body>
-
+    <!-- Modal for collecting the user's name -->
     <div id="nameModal" class="modal">
         <div class="modal-content">
             <h2>Welcome!</h2>
@@ -17,12 +21,15 @@
         </div>
     </div>
 
-    <button id="musicControl">Pause Music 🔇</button>
+    <!-- Music control button -->
+    <button id="musicControl">🔈</button>
 
+    <!-- Countdown to Valentine's Day -->
     <p id="countdown"></p>
 
+    <!-- Main game container -->
     <div class="container hidden">
-        <h1 id="mainQuestion">Will you be my Valentine?</h1>
+        <h1 id="mainQuestion"></h1>
         <div id="game" class="hidden">
             <p>Tap the floating hearts 3 times to unlock the question!</p>
             <div class="hearts">
@@ -31,32 +38,31 @@
                 <span class="heart">❤️</span>
             </div>
         </div>
-        <div id="question" class="hidden">
-            <button id="yes">Yes 💖</button>
-            <button id="no">No 😈</button>
-        </div>
+        <!-- Response after the question is answered -->
         <h2 id="response" class="hidden"></h2>
         <p id="hidden-message" class="hidden"></p>
     </div>
+
+    <!-- Canvas for confetti animation -->
     <canvas id="confetti"></canvas>
+    <!-- Audio elements for sounds -->
     <audio id="yesSound" src="yes-sound.mp3"></audio>
     <audio id="bgMusic" src="/Assets/music/bg-music.mp3" loop></audio>
 
-    <div id="surprise" class="hidden">
-        <img src="surprise.gif" alt="Surprise Animation">
-    </div>
-
-    <div id="hidden-heart" class="hidden-heart">💖</div>
-
+    <!-- Container for falling petals (optional) -->
     <div id="petals-container"></div>
 
+    <!-- Display random love messages -->
     <p class="love-message"></p>
 
+    <!-- Footer with your signature -->
     <footer>
         <p>Made with 💖 by Maina Zaquir</p>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1"></script>
+    <!-- Include the confetti library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <!-- Link to your updated JavaScript file -->
     <script src="script.js"></script>
 </body>
 </html>
