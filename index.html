@@ -33,70 +33,112 @@
 
     <style>
         /* CSS Styles */
-            body {
-                text-align: center;
-                font-family: Arial, sans-serif;
-                background-color: #ffe4e1;
-                margin: 0;
-                padding: 0;
-            }
-            .container {
-                margin-top: 50px;
-                padding: 20px;
-            }
-            h1 {
-                color: #ff4081;
-            }
-            .hearts {
-                display: flex;
-                justify-content: center;
-                gap: 10px;
-                font-size: 2rem;
-                cursor: pointer;
-            }
-            .heart {
-                animation: float 2s infinite ease-in-out;
-            }
-            @keyframes float {
-                0% { transform: translateY(0px); }
-                50% { transform: translateY(-10px); }
-                100% { transform: translateY(0px); }
-            }
-            .hidden {
-                display: none;
-            }
-            button {
-                font-size: 1.5rem;
-                padding: 10px 20px;
-                margin: 10px;
-                cursor: pointer;
-                border-radius: 8px;
-                border: none;
-            }
-            #yes {
-                background-color: #ff4081;
-                color: white;
-                transition: transform 0.3s ease;
-            }
-            #no {
-                background-color: #f44336;
-                color: white;
-                position: relative;
-            }
-            #try-again {
-                color: #ff4081;
-                font-size: 1.5rem;
-                margin-top: 20px;
-            }
-            @media (max-width: 600px) {
-                .hearts {
-                    font-size: 1.5rem;
-                }
-                button {
-                    font-size: 1.2rem;
-                    padding: 8px 16px;
-                }
-            }
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            background-color: #ffe4e1;
+        }
+        
+        .container {
+            margin-top: 50px;
+        }
+        
+        h1 {
+            color: #ff4081;
+        }
+        
+        .hearts {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+        
+        .heart {
+            animation: float 2s infinite ease-in-out;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        button {
+            font-size: 1.5rem;
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+            border-radius: 8px;
+            border: none;
+        }
+        
+        #yes {
+            background-color: #ff4081;
+            color: white;
+        }
+        
+        #no {
+            background-color: #f44336;
+            color: white;
+            position: relative;
+        }
+        
+        /* Gift Box Animation */
+        .gift-box {
+            width: 100px;
+            height: 100px;
+            background: #ff4081;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .gift-box::before {
+            content: "🎁";
+            font-size: 3rem;
+            position: absolute;
+            top: -10px;
+        }
+        
+        .gift-box.open {
+            animation: openGift 1s forwards;
+        }
+        
+        @keyframes openGift {
+            0% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -55%) scale(1.1); }
+            100% { transform: translate(-50%, -60%) scale(1.2); }
+        }
+        
+        .gift-message {
+            display: none;
+            position: absolute;
+            top: 110px;
+            font-size: 1.2rem;
+            color: #ff4081;
+            font-weight: bold;
+        }
+        
+        .gift-box.open .gift-message {
+            display: block;
+        }
+        
     </style>
 
     <script>
