@@ -97,6 +97,11 @@ h1 {
     cursor: pointer;
     animation: floatHeart 3s ease-in-out infinite;
     position: relative;
+    transition: opacity 0.5s ease;
+}
+
+.heart.clicked {
+    animation: none;
 }
 
 footer {

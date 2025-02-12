@@ -3,6 +3,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let noClickAttempts = 0;
     let evadeDistance = 150; 
     let userName = '';
+    let isMusicPlaying = true;
+
     const hearts = document.querySelectorAll('.heart');
     const game = document.getElementById('game');
     const question = document.getElementById('question');
@@ -21,8 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const musicControl = document.getElementById('musicControl');
     const loveMessageElement = document.querySelector('.love-message');
     const countdownElement = document.getElementById('countdown');
-    let isMusicPlaying = true;
-
+    
     const loveMessages = [
         "Love is composed of a single soul inhabiting two bodies. - Aristotle",
         "The best thing to hold onto in life is each other. - Audrey Hepburn",
@@ -32,8 +33,13 @@ document.addEventListener('DOMContentLoaded', () => {
         "To love and be loved is to feel the sun from both sides. - David Viscott"
     ];
 
-    bgMusic.volume = 0.1;
-    bgMusic.play();
+    // Handle autoplay restrictions
+    try {
+        bgMusic.volume = 0.1;
+        bgMusic.play().catch(err => console.log("Autoplay blocked: ", err));
+    } catch (err) {
+        console.log("Music play error: ", err);
+    }
 
     startGameBtn.addEventListener('click', () => {
         userName = userNameInput.value.trim() || 'Friend';
@@ -49,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
             bgMusic.pause();
             musicControl.textContent = 'Play Music 🎵';
         } else {
-            bgMusic.play();
+            bgMusic.play().catch(err => console.log("Autoplay blocked: ", err));
             musicControl.textContent = 'Pause Music 🔇';
         }
         isMusicPlaying = !isMusicPlaying;
@@ -58,8 +64,14 @@ document.addEventListener('DOMContentLoaded', () => {
     hearts.forEach(heart => {
         heart.addEventListener('click', () => {
             heartClicks++;
-            heart.classList.add('clicked');
             heart.style.pointerEvents = 'none';
+            heart.classList.add('clicked');
+            heart.style.opacity = '0';
+
+            setTimeout(() => {
+                heart.style.display = 'none'; 
+            }, 500);
+
             if (heartClicks === 3) {
                 setTimeout(() => {
                     game.classList.add('hidden');
@@ -79,8 +91,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function moveNoButton() {
         const x = Math.random() * (window.innerWidth - noButton.offsetWidth);
         const y = Math.random() * (window.innerHeight - noButton.offsetHeight);
-        noButton.style.left = `${x}px`;
-        noButton.style.top = `${y}px`;
+        noButton.style.left = `${clamp(x, 0, window.innerWidth - noButton.offsetWidth)}px`;
+        noButton.style.top = `${clamp(y, 0, window.innerHeight - noButton.offsetHeight)}px`;
     }
 
     function evadeMouse(event) {
@@ -89,7 +101,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const buttonRect = noButton.getBoundingClientRect();
         const buttonX = buttonRect.left + buttonRect.width / 2;
         const buttonY = buttonRect.top + buttonRect.height / 2;
-
         const distance = Math.hypot(buttonX - mouseX, buttonY - mouseY);
 
         if (distance < evadeDistance) {
@@ -97,13 +108,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const moveToX = buttonX + Math.cos(angle) * evadeDistance * 1.5;
             const moveToY = buttonY + Math.sin(angle) * evadeDistance * 1.5;
 
-            noButton.style.left = `${clamp(moveToX - noButton.offsetWidth / 2, 0, window.innerWidth - noButton.offsetWidth)}px`;
-            noButton.style.top = `${clamp(moveToY - noButton.offsetHeight / 2, 0, window.innerHeight - noButton.offsetHeight)}px`;
+            noButton.style.left = `${clamp(moveToX, 0, window.innerWidth - noButton.offsetWidth)}px`;
+            noButton.style.top = `${clamp(moveToY, 0, window.innerHeight - noButton.offsetHeight)}px`;
         }
-    }
-
-    function clamp(value, min, max) {
-        return Math.min(Math.max(value, min), max);
     }
 
     function handleNoButtonClick() {
@@ -130,88 +137,10 @@ document.addEventListener('DOMContentLoaded', () => {
         hiddenMessage.textContent = `You're the best thing that ever happened to me, ${userName}! 💝`;
         yesSound.play();
         startConfetti();
-        showSurprise();
     });
-
-    function startConfetti() {
-        const end = Date.now() + (5 * 1000);
-        const colors = ['#ff6b81', '#f368e0', '#ff9ff3'];
-
-        (function frame() {
-            confetti({
-                particleCount: 5,
-                angle: 60,
-                spread: 55,
-                origin: { x: 0 },
-                colors: colors
-            });
-            confetti({
-                particleCount: 5,
-                angle: 120,
-                spread: 55,
-                origin: { x: 1 },
-                colors: colors
-            });
-
-            if (Date.now() < end) {
-                requestAnimationFrame(frame);
-            }
-        }());
-    }
-
-    function showSurprise() {
-        surprise.classList.remove('hidden');
-        setTimeout(() => {
-            surprise.classList.add('hidden');
-        }, 5000); 
-    }
-
-    
-    hiddenHeart.addEventListener('click', () => {
-        alert(`Surprise, ${userName}! You found the hidden heart! 💘`);
-        startConfetti();
-        hiddenHeart.style.display = 'none';
-    });
-
-    setTimeout(() => {
-        hiddenHeart.style.display = 'block';
-    }, 10000);
-
-    function createFloatingHearts() {
-        setInterval(() => {
-            const heart = document.createElement('div');
-            heart.className = 'bg-heart';
-            heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.animationDuration = Math.random() * 5 + 5 + 's';
-            document.body.appendChild(heart);
-            setTimeout(() => { heart.remove(); }, 10000);
-        }, 500);
-    }
-    createFloatingHearts();
-
-    function createPetals() {
-        const totalPetals = 15;
-        for (let i = 0; i < totalPetals; i++) {
-            setTimeout(() => {
-                const petal = document.createElement('div');
-                petal.className = 'petal';
-                petal.style.left = Math.random() * 100 + 'vw';
-                petal.style.animationDelay = Math.random() * 5 + 's';
-                petal.style.animationDuration = Math.random() * 5 + 5 + 's';
-                document.getElementById('petals-container').appendChild(petal);
-                setTimeout(() => {
-                    petal.remove();
-                }, 10000);
-            }, i * 500);
-        }
-    }
-
-    createPetals();
-    setInterval(createPetals, 15000); 
 
     function showRandomMessage() {
-        const message = loveMessages[Math.floor(Math.random() * loveMessages.length)];
-        loveMessageElement.textContent = message;
+        loveMessageElement.textContent = loveMessages[Math.floor(Math.random() * loveMessages.length)];
     }
 
     function updateCountdown() {
@@ -220,14 +149,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (today > valentineDate) {
             valentineDate = new Date(today.getFullYear() + 1, 1, 14);
         }
-        const diffTime = valentineDate - today;
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        const diffDays = Math.ceil((valentineDate - today) / (1000 * 60 * 60 * 24));
         countdownElement.textContent = `${diffDays} day(s) until Valentine's Day! 💖`;
+        requestAnimationFrame(updateCountdown);
     }
 
     updateCountdown();
-    setInterval(updateCountdown, 86400000); 
 
-    game.classList.add('hidden');
-    question.classList.add('hidden');
+    function clamp(value, min, max) {
+        return Math.min(Math.max(value, min), max);
+    }
 });
