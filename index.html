@@ -99,5 +99,86 @@
             }
     </style>
 
+    <script>
+        // JavaScript Code
+        let hearttclicks = 0;
+        const hearts = document.querySelectorAll('.heart');
+        const question = document.getElementById('question');
+        const response = document.getElementById('reponse');
+        const tryAgain = document.getElementById('try-again');
+        const noButton = document.getElementById('no');
+        const yesButton = document.getElementById('yes');
+
+        hearts.forEach(heart => {
+            heart.addEventListener('click', () => {
+                heart.style.opacity = '0';
+                hearttclicks++;
+                if (heartClicks === 3) {
+                    game.classList.add('hidden');
+                    question.classList.remove('hidden');
+                }
+            });
+        });
+
+        noButton.addEventListener('click', () => {
+            noButton.classList.add('hidden');
+            tryAgain.classList.remove('hidden');
+            yesButton.style.transform = 'scale(1.5)';
+        });
+
+        yesButton.addEventListener('click', () => {
+            response.classList.remove('hidden');
+            question.classList.add('hidden');
+            tryAgain.classList.add('hidden');
+            startConfetti();
+        });
+
+        function startConfetti() {
+            const confettiCanvas = document.getElementById('confetti');
+            const ctx = confettiCanvas.getContext('2d');
+            confettiCanvas.width = window.innerWidth;
+            confettiCanvas.height = window.innerHeight;
+            const confetti = [];
+
+            for (let i = 0; i < 100; i++) {
+                confetti.push({
+                    x: Math.random() * confettiCanvas.width,
+                    y: Math.random() * confettiCanvas.height,
+                    r: Math.random() * 6 + 2,
+                    d: Math.random() * 5 + 1
+                });
+            }
+
+            function drawConfetti() {
+                ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+                confetti.forEach(p => {
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                    ctx.fillStyle = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                    ctx.fill();
+                });
+                moveConfetti();
+            }
+
+            function moveConfetti() {
+                confetti.forEach(p => {
+                    p.y += p.d;
+                    if (p.y > confettiCanvas.height) {
+                        p.y = 0;
+                    }
+                });
+            }
+
+            function loop() {
+                drawConfetti();
+                requestAnimationFrame(loop);
+            }
+
+            loop();
+        }
+
+
+    </script>
+
 </body>
 </html>
