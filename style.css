@@ -1,0 +1,324 @@
+body {
+    margin: 0;
+    font-family: 'Lato', sans-serif;
+    overflow: hidden;
+    background: linear-gradient(45deg, #ff9a9e, #fecfef, #a18cd1, #fbc2eb, #fad0c4, #ffd1ff);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    position: relative;
+}
+
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 5;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.8);
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+}
+
+.modal-content h2 {
+    font-family: 'Pacifico', cursive;
+    margin-bottom: 20px;
+}
+
+.modal-content input {
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    width: 80%;
+    margin-bottom: 20px;
+}
+
+.modal-content button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 10px;
+    border: none;
+    background-color: #ff6b81;
+    color: #fff;
+    cursor: pointer;
+}
+
+.modal-content button:hover {
+    background-color: #ff4757;
+}
+
+.container {
+    text-align: center;
+    padding: 50px;
+    color: #fff;
+    text-shadow: 2px 2px #ff6b81;
+}
+
+h1 {
+    font-family: 'Pacifico', cursive;
+    font-size: 3rem;
+    margin-bottom: 20px;
+    animation: glow 2s infinite alternate;
+}
+
+@keyframes glow {
+    from {
+        text-shadow: 0 0 10px #ff6b81, 0 0 20px #ff6b81;
+    }
+    to {
+        text-shadow: 0 0 20px #ff6b81, 0 0 30px #ff6b81;
+    }
+}
+
+.hearts {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 20px;
+}
+
+.heart {
+    font-size: 4rem;
+    cursor: pointer;
+    animation: floatHeart 3s ease-in-out infinite;
+    position: relative;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    text-align: center;
+    padding: 10px 0;
+    color: #fff;
+    font-size: 1rem;
+    backdrop-filter: blur(5px);
+    z-index: 2;
+}
+
+footer p {
+    margin: 0;
+    text-shadow: 1px 1px #ff6b81;
+}
+
+@keyframes floatHeart {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-20px) rotate(-10deg);
+    }
+}
+
+.hidden {
+    display: none;
+}
+
+button {
+    font-size: 1.5rem;
+    padding: 15px 30px;
+    margin: 10px;
+    cursor: pointer;
+    border-radius: 25px;
+    border: none;
+    color: white;
+    transition: all 0.3s ease-in-out;
+}
+
+#yes {
+    background-color: #ff6b81;
+    box-shadow: 0 0 15px rgba(255, 107, 129, 0.6);
+    transition: transform 0.2s ease;
+}
+
+#no {
+    background-color: #f368e0;
+    position: absolute;
+    transition: left 0.2s ease, top 0.2s ease;
+}
+
+button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.8);
+}
+
+#response {
+    margin-top: 30px;
+    font-size: 2rem;
+    font-family: 'Pacifico', cursive;
+    animation: fadeIn 2s ease-in-out;
+}
+
+#hidden-message {
+    font-size: 1.5rem;
+    margin-top: 20px;
+    animation: slideIn 1s forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+#surprise {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+}
+
+#surprise img {
+    width: 300px;
+    height: auto;
+    animation: popIn 1s ease-in-out;
+}
+
+@keyframes popIn {
+    from { transform: scale(0); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.hidden-heart {
+    position: fixed;
+    bottom: 10%;
+    right: 5%;
+    font-size: 2rem;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: transform 0.3s, opacity 0.3s;
+    display: none;
+}
+
+.hidden-heart:hover {
+    transform: scale(1.2);
+    opacity: 1;
+}
+
+@keyframes heartFloat {
+    0% { transform: translateY(0) scale(0.8); opacity: 1; }
+    100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
+}
+
+.bg-heart {
+    position: fixed;
+    bottom: -10vh;
+    left: calc(50% - 10px);
+    width: 20px;
+    height: 20px;
+    background-image: url('/Assets/pictures/heart.png');
+    background-size: cover;
+    animation: heartFloat 10s infinite;
+    z-index: 0;
+}
+
+#petals-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.petal {
+    position: absolute;
+    top: -10%;
+    width: 40px;
+    height: 40px;
+    background-image: url('/Assets/pictures/petal.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0.8;
+    animation: fall 10s linear infinite;
+}
+
+@keyframes fall {
+    0% {
+        transform: translateX(0) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(100px) rotate(360deg);
+        top: 110%;
+        opacity: 0;
+    }
+}
+
+#musicControl {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px;
+    border: none;
+    border-radius: 50%;
+    background-color: #ff6b81;
+    color: white;
+    cursor: pointer;
+    font-size: 1.2rem;
+    z-index: 5;
+}
+
+#musicControl:hover {
+    background-color: #ff4757;
+}
+
+#countdown {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    color: #fff;
+    font-size: 1.2rem;
+    z-index: 5;
+    text-shadow: 1px 1px #ff6b81;
+}
+
+.love-message {
+    font-size: 1.5rem;
+    color: #fff;
+    margin-top: 20px;
+    animation: fadeIn 2s;
+    text-shadow: 1px 1px #ff6b81;
+}
+
+@keyframes shake {
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    10% { transform: translate(-1px, -2px) rotate(-1deg); }
+    20% { transform: translate(-3px, 0px) rotate(1deg); }
+    30% { transform: translate(3px, 2px) rotate(0deg); }
+    40% { transform: translate(1px, -1px) rotate(1deg); }
+    50% { transform: translate(-1px, 2px) rotate(-1deg); }
+    60% { transform: translate(-3px, 1px) rotate(0deg); }
+    70% { transform: translate(3px, 1px) rotate(-1deg); }
+    80% { transform: translate(-1px, -1px) rotate(1deg); }
+    90% { transform: translate(1px, 2px) rotate(0deg); }
+    100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+
+.shake {
+    animation: shake 0.5s;
+    animation-iteration-count: 1;
+}

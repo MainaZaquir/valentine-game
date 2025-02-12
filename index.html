@@ -2,16 +2,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Valentine's Game</title>
+    <title>Valentine's Game Enhanced</title>
     <link rel="stylesheet" href="style.css">
-    <script defer src="script.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Lato&display=swap" rel="stylesheet">
 </head>
 <body>
-    
-    <div class="container">
-        <h1>Will you be my valentine? 💖</h1>
-        <div id="game">
+
+    <div id="nameModal" class="modal">
+        <div class="modal-content">
+            <h2>Welcome!</h2>
+            <p>Please enter your name:</p>
+            <input type="text" id="userNameInput" placeholder="Your Name">
+            <button id="startGame">Start Game</button>
+        </div>
+    </div>
+
+    <button id="musicControl">Pause Music 🔇</button>
+
+    <p id="countdown"></p>
+
+    <div class="container hidden">
+        <h1 id="mainQuestion">Will you be my Valentine?</h1>
+        <div id="game" class="hidden">
             <p>Tap the floating hearts 3 times to unlock the question!</p>
             <div class="hearts">
                 <span class="heart">❤️</span>
@@ -20,234 +32,31 @@
             </div>
         </div>
         <div id="question" class="hidden">
-            <button id="yes"> Yes 💖</button>
+            <button id="yes">Yes 💖</button>
             <button id="no">No 😈</button>
         </div>
+        <h2 id="response" class="hidden"></h2>
+        <p id="hidden-message" class="hidden"></p>
+    </div>
+    <canvas id="confetti"></canvas>
+    <audio id="yesSound" src="yes-sound.mp3"></audio>
+    <audio id="bgMusic" src="/Assets/music/bg-music.mp3" loop></audio>
 
-        <h2 id="response" class="hidden"> Yay! I knew you'd say YES! 🎉</h2>
-        <p id="try-again" class="hidden">Try Again! 😜</p>
-        <canvas id="confetti"></canvas>
+    <div id="surprise" class="hidden">
+        <img src="surprise.gif" alt="Surprise Animation">
     </div>
 
-    <style>
-        /* General Styling */
-        body {
-            text-align: center;
-            font-family: Arial, sans-serif;
-            background-color: #ffe4e1;
-            overflow: hidden;
-        }
+    <div id="hidden-heart" class="hidden-heart">💖</div>
 
-        .container {
-            margin-top: 50px;
-        }
+    <div id="petals-container"></div>
 
-        h1 {
-            color: #ff4081;
-        }
+    <p class="love-message"></p>
 
-        .hearts {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            font-size: 2rem;
-            cursor: pointer;
-        }
+    <footer>
+        <p>Made with 💖 by Maina Zaquir</p>
+    </footer>
 
-        /* Heart Popping Effect */
-        .heart {
-            transition: transform 0.3s ease-in-out, opacity 0.5s ease-in-out;
-        }
-
-        .heart.popped {
-            transform: scale(1.5);
-            opacity: 0;
-        }
-
-        /* Hidden elements */
-        .hidden {
-            display: none;
-        }
-
-        /* Smooth Button Animation */
-        button {
-            font-size: 1.5rem;
-            padding: 10px 20px;
-            margin: 10px;
-            cursor: pointer;
-            border-radius: 8px;
-            border: none;
-            transition: transform 0.2s ease-in-out;
-        }
-
-        button:hover {
-            transform: scale(1.1);
-        }
-
-        #yes {
-            background-color: #ff4081;
-            color: white;
-        }
-
-        #no {
-            background-color: #f44336;
-            color: white;
-            position: relative;
-        }
-
-        /* Gift Box */
-        .gift-box {
-            width: 100px;
-            height: 100px;
-            background: #ff4081;
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .gift-box::before {
-            content: "🎁";
-            font-size: 3rem;
-            position: absolute;
-            top: -10px;
-        }
-
-        /* Gift Box Bounce */
-        @keyframes bounce {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); }
-            50% { transform: translate(-50%, -55%) scale(1.2); }
-        }
-
-        .gift-box.open {
-            animation: bounce 1s infinite;
-        }
-
-        .gift-message {
-            display: none;
-            position: absolute;
-            top: 110px;
-            font-size: 1.2rem;
-            color: #ff4081;
-            font-weight: bold;
-        }
-
-        .gift-box.open .gift-message {
-            display: block;
-        }
-    </style>
-
-    <script>
-        // JavaScript Fixes
-        let heartClicks = 0;
-        let noClicks = 0;
-        const hearts = document.querySelectorAll('.heart');
-        const game = document.getElementById('game');
-        const question = document.getElementById('question');
-        const response = document.getElementById('response');
-        const noButton = document.getElementById('no');
-        const yesButton = document.getElementById('yes');
-        const secretMessage = document.createElement("h3");
-        const giftBox = document.createElement("div");
-        const messageInside = document.createElement("p");
-
-        hearts.forEach(heart => {
-            heart.addEventListener('click', () => {
-                heart.classList.add('popped');
-                heartClicks++;
-                if (heartClicks === 3) {
-                    game.classList.add('hidden');
-                    question.classList.remove('hidden');
-                }
-            });
-        });
-
-        // Make "No" Button Run Away
-        noButton.addEventListener('mouseover', () => {
-            const x = Math.random() * (window.innerWidth - 100);
-            const y = Math.random() * (window.innerHeight - 50);
-            noButton.style.position = 'absolute';
-            noButton.style.left = `${x}px`;
-            noButton.style.top = `${y}px`;
-        });
-
-        noButton.addEventListener('click', () => {
-            noClicks++;
-            if (noClicks >= 5) {
-                secretMessage.innerText = "There’s no escaping love! 💘";
-                secretMessage.style.color = "#ff4081";
-                secretMessage.style.marginTop = "20px";
-                document.body.appendChild(secretMessage);
-                noButton.style.display = "none";
-            }
-        });
-
-        yesButton.addEventListener('click', () => {
-            response.classList.remove('hidden');
-            question.classList.add('hidden');
-            startConfetti();
-            showGiftBox();
-        });
-
-        function showGiftBox() {
-            giftBox.classList.add("gift-box");
-            messageInside.innerText = "You're my favorite person! 💖";
-            messageInside.classList.add("gift-message");
-            giftBox.appendChild(messageInside);
-
-            setTimeout(() => {
-                giftBox.classList.add("open");
-            }, 2000);
-
-            document.body.appendChild(giftBox);
-        }
-
-        function startConfetti() {
-            const confettiCanvas = document.getElementById('confetti');
-            const ctx = confettiCanvas.getContext('2d');
-            confettiCanvas.width = window.innerWidth;
-            confettiCanvas.height = window.innerHeight;
-            const confetti = [];
-
-            for (let i = 0; i < 100; i++) {
-                confetti.push({
-                    x: Math.random() * confettiCanvas.width,
-                    y: Math.random() * confettiCanvas.height,
-                    r: Math.random() * 6 + 2,
-                    d: Math.random() * 5 + 1,
-                    angle: Math.random() * 360
-                });
-            }
-
-            function drawConfetti() {
-                ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
-                confetti.forEach(p => {
-                    ctx.save();
-                    ctx.translate(p.x, p.y);
-                    ctx.rotate(p.angle * Math.PI / 180);
-                    ctx.fillStyle = `hsl(${Math.random() * 360}, 100%, 50%)`;
-                    ctx.fillRect(-p.r / 2, -p.r / 2, p.r, p.r);
-                    ctx.restore();
-                });
-            }
-
-            function loop() {
-                drawConfetti();
-                requestAnimationFrame(loop);
-            }
-
-            loop();
-        }
-    </script>
-
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1"></script>
+    <script src="script.js"></script>
 </body>
 </html>
