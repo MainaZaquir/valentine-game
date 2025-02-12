@@ -143,18 +143,22 @@
 
     <script>
         // JavaScript Code
-        let hearttclicks = 0;
+        let heartClicks = 0;
+        let noClicks = 0;
         const hearts = document.querySelectorAll('.heart');
+        const game = document.getElementById('game');
         const question = document.getElementById('question');
-        const response = document.getElementById('reponse');
-        const tryAgain = document.getElementById('try-again');
+        const response = document.getElementById('response');
         const noButton = document.getElementById('no');
         const yesButton = document.getElementById('yes');
+        const secretMessage = document.createElement("h3");
+        const giftBox = document.createElement("div");
+        const messageInside = document.createElement("p");
 
         hearts.forEach(heart => {
             heart.addEventListener('click', () => {
                 heart.style.opacity = '0';
-                hearttclicks++;
+                heartClicks++;
                 if (heartClicks === 3) {
                     game.classList.add('hidden');
                     question.classList.remove('hidden');
@@ -162,18 +166,44 @@
             });
         });
 
+        noButton.addEventListener('mouseover', () => {
+            const x = Math.random() * (window.innerWidth - 100);
+            const y = Math.random() * (window.innerHeight - 50);
+            noButton.style.position = 'absolute';
+            noButton.style.left = `${x}px`;
+            noButton.style.top = `${y}px`;
+        });
+
         noButton.addEventListener('click', () => {
-            noButton.classList.add('hidden');
-            tryAgain.classList.remove('hidden');
-            yesButton.style.transform = 'scale(1.5)';
+            noClicks++;
+            if (noClicks >= 5) {
+                secretMessage.innerText = "There’s no escaping love! 💘";
+                secretMessage.style.color = "#ff4081";
+                secretMessage.style.marginTop = "20px";
+                document.body.appendChild(secretMessage);
+                noButton.style.display = "none";
+            }
         });
 
         yesButton.addEventListener('click', () => {
             response.classList.remove('hidden');
             question.classList.add('hidden');
-            tryAgain.classList.add('hidden');
             startConfetti();
+            showGiftBox();
         });
+
+        function showGiftBox() {
+            giftBox.classList.add("gift-box");
+            messageInside.innerText = "You're my favorite person! 💖";
+            messageInside.classList.add("gift-message");
+
+            setTimeout(() => {
+                giftBox.classList.add("open"); 
+                giftBox.appendChild(messageInside);
+            }, 2000); 
+
+            document.body.appendChild(giftBox);
+        }
 
         function startConfetti() {
             const confettiCanvas = document.getElementById('confetti');
